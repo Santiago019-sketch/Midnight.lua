@@ -1,56 +1,109 @@
-local players = game:GetService("Players")
-local replicatedStorage = game:GetService("ReplicatedStorage")
-local workspace = game:GetService("Workspace")
-local localPlayer = players.LocalPlayer
-local playerName = localPlayer.Name
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local localPlayer = Players.LocalPlayer
 
--- Define tables
-local tbl_main2 = {
-    localPlayer.Stats,
-    localPlayer.Status,
-    workspace[playerName].Humanoid,
-    workspace[playerName].RightHand
-}
+-- Create the ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = localPlayer.PlayerGui
+screenGui.Name = "TrainingGui"
 
-local tbl_main = {
-    localPlayer.Status,
-    localPlayer.Stats,
-    workspace[playerName].HumanoidRootPart,
-    workspace[playerName].RightHand,
-    workspace[playerName]
-}
+-- Create a Frame for the GUI layout
+local frame = Instance.new("Frame")
+frame.Parent = screenGui
+frame.Size = UDim2.new(0, 400, 0, 300)
+frame.Position = UDim2.new(0.5, -200, 0.5, -150)  -- Center the frame
+frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+frame.BackgroundTransparency = 0.5
 
-local tbl_0xa51df21d2a5b4043 = {
-    ["LeftLowerArm"] = workspace[playerName].LeftLowerArm,
-    ["RightUpperArm"] = workspace[playerName].RightUpperArm,
-    ["LeftFoot"] = workspace[playerName].LeftFoot,
-    ["RightHand"] = workspace[playerName].RightHand,
-    ["RightLowerArm"] = workspace[playerName].RightLowerArm,
-    ["LeftUpperLeg"] = workspace[playerName].LeftUpperLeg,
-    ["LeftUpperArm"] = workspace[playerName].LeftUpperArm,
-    ["Character"] = workspace[playerName],
-    ["LeftHand"] = workspace[playerName].LeftHand,
-    ["RightFoot"] = workspace[playerName].RightFoot,
-    ["Humanoid"] = workspace[playerName].Humanoid,
-    ["RightLowerLeg"] = workspace[playerName].RightLowerLeg,
-    ["RightUpperLeg"] = workspace[playerName].RightUpperLeg,
-    ["LeftLowerLeg"] = workspace[playerName].LeftLowerLeg
-}
+-- Create a Title Label for the Frame
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Parent = frame
+titleLabel.Size = UDim2.new(1, 0, 0, 50)
+titleLabel.Text = "Training Commands"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextSize = 24
+titleLabel.BackgroundTransparency = 1
+titleLabel.TextAlign = Enum.TextAlign.Center
 
-local tbl_main1 = {
-    localPlayer.Stats,
-    tbl_0xa51df21d2a5b4043
-}
+-- Create a button for Combat
+local combatButton = Instance.new("TextButton")
+combatButton.Parent = frame
+combatButton.Size = UDim2.new(0, 200, 0, 50)
+combatButton.Position = UDim2.new(0.5, -100, 0, 60)
+combatButton.Text = "Start Combat Training"
+combatButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+combatButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+combatButton.TextSize = 20
 
-local tbl_main6 = {
-    localPlayer.Stats
-}
+-- Create a button for Defense
+local defenseButton = Instance.new("TextButton")
+defenseButton.Parent = frame
+defenseButton.Size = UDim2.new(0, 200, 0, 50)
+defenseButton.Position = UDim2.new(0.5, -100, 0, 120)
+defenseButton.Text = "Start Defense Training"
+defenseButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
+defenseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+defenseButton.TextSize = 20
 
--- Optimize the loop
-local runService = game:GetService("RunService")
-runService.RenderStepped:Connect(function()
-    replicatedStorage.Remotes.Training.Combat5:InvokeServer(unpack(tbl_main1))
-    replicatedStorage.Remotes.Training.Defense5:InvokeServer(unpack(tbl_main2))
-    replicatedStorage.Remotes.Training.Blast5:InvokeServer(unpack(tbl_main))
-    replicatedStorage.Remotes.Training.Agility5:FireServer(unpack(tbl_main6))
-end)
+-- Create a button for Blast
+local blastButton = Instance.new("TextButton")
+blastButton.Parent = frame
+blastButton.Size = UDim2.new(0, 200, 0, 50)
+blastButton.Position = UDim2.new(0.5, -100, 0, 180)
+blastButton.Text = "Start Blast Training"
+blastButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+blastButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+blastButton.TextSize = 20
+
+-- Create a button for Agility
+local agilityButton = Instance.new("TextButton")
+agilityButton.Parent = frame
+agilityButton.Size = UDim2.new(0, 200, 0, 50)
+agilityButton.Position = UDim2.new(0.5, -100, 0, 240)
+agilityButton.Text = "Start Agility Training"
+agilityButton.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+agilityButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+agilityButton.TextSize = 20
+
+-- Function to handle button clicks
+local function onCombatButtonClick()
+    local tbl_main1 = {
+        localPlayer.Stats,
+        localPlayer.Status
+    }
+    ReplicatedStorage.Remotes.Training.Combat5:InvokeServer(unpack(tbl_main1))
+end
+
+local function onDefenseButtonClick()
+    local tbl_main2 = {
+        localPlayer.Stats,
+        localPlayer.Status,
+        workspace[localPlayer.Name].Humanoid,
+        workspace[localPlayer.Name].RightHand
+    }
+    ReplicatedStorage.Remotes.Training.Defense5:InvokeServer(unpack(tbl_main2))
+end
+
+local function onBlastButtonClick()
+    local tbl_main = {
+        localPlayer.Status,
+        localPlayer.Stats,
+        workspace[localPlayer.Name].HumanoidRootPart,
+        workspace[localPlayer.Name].RightHand,
+        workspace[localPlayer.Name]
+    }
+    ReplicatedStorage.Remotes.Training.Blast5:InvokeServer(unpack(tbl_main))
+end
+
+local function onAgilityButtonClick()
+    local tbl_main6 = {
+        localPlayer.Stats
+    }
+    ReplicatedStorage.Remotes.Training.Agility5:FireServer(unpack(tbl_main6))
+end
+
+-- Connect button clicks to functions
+combatButton.MouseButton1Click:Connect(onCombatButtonClick)
+defenseButton.MouseButton1Click:Connect(onDefenseButtonClick)
+blastButton.MouseButton1Click:Connect(onBlastButtonClick)
+agilityButton.MouseButton1Click:Connect(onAgilityButtonClick)
