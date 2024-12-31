@@ -1,50 +1,71 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Workspace = game:GetService("Workspace")
 local localPlayer = Players.LocalPlayer
 local playerName = localPlayer.Name
 
--- GUI Setup
+-- Create the main ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "TrainingGui"
 screenGui.Parent = localPlayer.PlayerGui
 
--- Main Frame
+-- Create a dark background Frame
+local backgroundFrame = Instance.new("Frame")
+backgroundFrame.Parent = screenGui
+backgroundFrame.Size = UDim2.new(1, 0, 1, 0) -- Full screen
+backgroundFrame.Position = UDim2.new(0, 0, 0, 0)
+backgroundFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+backgroundFrame.BackgroundTransparency = 0.7
+
+-- Main container frame for buttons
 local frame = Instance.new("Frame")
 frame.Parent = screenGui
-frame.Size = UDim2.new(0, 400, 0, 300)
-frame.Position = UDim2.new(0.5, -200, 0.5, -150)  -- Center the frame
-frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-frame.BackgroundTransparency = 0.5
-frame.BorderSizePixel = 0  -- Remove the frame border for a cleaner look
+frame.Size = UDim2.new(0, 400, 0, 350)
+frame.Position = UDim2.new(0.5, -200, 0.5, -175)  -- Center the frame
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.BackgroundTransparency = 0.8
+frame.BorderSizePixel = 0
+frame.ClipsDescendants = true
 
--- Title Label
+-- Title Label for the GUI
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Parent = frame
 titleLabel.Size = UDim2.new(1, 0, 0, 50)
 titleLabel.Text = "Training Commands"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleLabel.TextSize = 24
+titleLabel.TextSize = 26
 titleLabel.BackgroundTransparency = 1
 titleLabel.TextAlign = Enum.TextAlign.Center
+titleLabel.Font = Enum.Font.GothamBold
 
--- Button Generator Function
-local function createButton(text, position, callback)
+-- Create a reusable function for buttons
+local function createButton(text, position, callback, color)
     local button = Instance.new("TextButton")
     button.Parent = frame
-    button.Size = UDim2.new(0, 200, 0, 50)
+    button.Size = UDim2.new(0, 300, 0, 50)
     button.Position = position
     button.Text = text
-    button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)  -- Default color
+    button.BackgroundColor3 = color
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
     button.TextSize = 20
+    button.Font = Enum.Font.Gotham
     button.BorderSizePixel = 0
+    button.AutoButtonColor = false  -- Disable button color change on hover
 
+    -- Hover effect to change button color
+    button.MouseEnter:Connect(function()
+        button.BackgroundColor3 = color:Lerp(Color3.fromRGB(255, 255, 255), 0.2)  -- Lighten the button on hover
+    end)
+
+    button.MouseLeave:Connect(function()
+        button.BackgroundColor3 = color  -- Restore original color
+    end)
+
+    -- Button click action
     button.MouseButton1Click:Connect(callback)
     return button
 end
 
--- Buttons and their actions
+-- Button click functions
 local function onCombatButtonClick()
     local tbl_main1 = {
         localPlayer.Stats,
@@ -57,8 +78,8 @@ local function onDefenseButtonClick()
     local tbl_main2 = {
         localPlayer.Stats,
         localPlayer.Status,
-        Workspace[playerName].Humanoid,
-        Workspace[playerName].RightHand
+        game.Workspace[playerName].Humanoid,
+        game.Workspace[playerName].RightHand
     }
     ReplicatedStorage.Remotes.Training.Defense5:InvokeServer(unpack(tbl_main2))
 end
@@ -67,9 +88,9 @@ local function onBlastButtonClick()
     local tbl_main = {
         localPlayer.Status,
         localPlayer.Stats,
-        Workspace[playerName].HumanoidRootPart,
-        Workspace[playerName].RightHand,
-        Workspace[playerName]
+        game.Workspace[playerName].HumanoidRootPart,
+        game.Workspace[playerName].RightHand,
+        game.Workspace[playerName]
     }
     ReplicatedStorage.Remotes.Training.Blast5:InvokeServer(unpack(tbl_main))
 end
@@ -81,8 +102,8 @@ local function onAgilityButtonClick()
     ReplicatedStorage.Remotes.Training.Agility5:FireServer(unpack(tbl_main6))
 end
 
--- Creating the buttons using the generator function
-createButton("Start Combat Training", UDim2.new(0.5, -100, 0, 60), onCombatButtonClick)
-createButton("Start Defense Training", UDim2.new(0.5, -100, 0, 120), onDefenseButtonClick)
-createButton("Start Blast Training", UDim2.new(0.5, -100, 0, 180), onBlastButtonClick)
-createButton("Start Agility Training", UDim2.new(0.5, -100, 0, 240), onAgilityButtonClick)
+-- Create buttons using the createButton function
+createButton("Start Combat Training", UDim2.new(0.5, -150, 0, 70), onCombatButtonClick, Color3.fromRGB(255, 0, 0))
+createButton("Start Defense Training", UDim2.new(0.5, -150, 0, 130), onDefenseButtonClick, Color3.fromRGB(0, 0, 255))
+createButton("Start Blast Training", UDim2.new(0.5, -150, 0, 190), onBlastButtonClick, Color3.fromRGB(0, 255, 0))
+createButton("Start Agility Training", UDim2.new(0.5, -150, 0, 250), onAgilityButtonClick, Color3.fromRGB(255, 255, 0))
