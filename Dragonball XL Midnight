@@ -1,49 +1,56 @@
-local tbl_main2 = 
-{
-      game:GetService("Players")[game.Players.LocalPlayer.Name].Stats, 
-      game:GetService("Players")[game.Players.LocalPlayer.Name].Status, 
-      game:GetService("Workspace")[game.Players.LocalPlayer.Name].Humanoid, 
-      game:GetService("Workspace")[game.Players.LocalPlayer.Name].RightHand
+local players = game:GetService("Players")
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local workspace = game:GetService("Workspace")
+local localPlayer = players.LocalPlayer
+local playerName = localPlayer.Name
+
+-- Define tables
+local tbl_main2 = {
+    localPlayer.Stats,
+    localPlayer.Status,
+    workspace[playerName].Humanoid,
+    workspace[playerName].RightHand
 }
-local tbl_main = 
-{
-      game:GetService("Players")[game.Players.LocalPlayer.Name].Status, 
-      game:GetService("Players")[game.Players.LocalPlayer.Name].Stats, 
-      game:GetService("Workspace")[game.Players.LocalPlayer.Name].HumanoidRootPart, 
-      game:GetService("Workspace")[game.Players.LocalPlayer.Name].RightHand, 
-      game:GetService("Workspace")[game.Players.LocalPlayer.Name]
+
+local tbl_main = {
+    localPlayer.Status,
+    localPlayer.Stats,
+    workspace[playerName].HumanoidRootPart,
+    workspace[playerName].RightHand,
+    workspace[playerName]
 }
-local tbl_0xa51df21d2a5b4043 = 
-{
-      ["LeftLowerArm"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name].LeftLowerArm, 
-      ["RightUpperArm"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name].RightUpperArm, 
-      ["LeftFoot"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name].LeftFoot, 
-      ["RightHand"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name].RightHand, 
-      ["RightLowerArm"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name].RightLowerArm, 
-      ["LeftUpperLeg"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name].LeftUpperLeg, 
-      ["LeftUpperArm"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name].LeftUpperArm, 
-      ["Character"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name], 
-      ["LeftHand"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name].LeftHand, 
-      ["RightFoot"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name].RightFoot, 
-      ["Humanoid"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name].Humanoid, 
-      ["RightLowerLeg"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name].RightLowerLeg, 
-      ["RightUpperLeg"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name].RightUpperLeg, 
-      ["LeftLowerLeg"] = game:GetService("Workspace")[game.Players.LocalPlayer.Name].LeftLowerLeg
+
+local tbl_0xa51df21d2a5b4043 = {
+    ["LeftLowerArm"] = workspace[playerName].LeftLowerArm,
+    ["RightUpperArm"] = workspace[playerName].RightUpperArm,
+    ["LeftFoot"] = workspace[playerName].LeftFoot,
+    ["RightHand"] = workspace[playerName].RightHand,
+    ["RightLowerArm"] = workspace[playerName].RightLowerArm,
+    ["LeftUpperLeg"] = workspace[playerName].LeftUpperLeg,
+    ["LeftUpperArm"] = workspace[playerName].LeftUpperArm,
+    ["Character"] = workspace[playerName],
+    ["LeftHand"] = workspace[playerName].LeftHand,
+    ["RightFoot"] = workspace[playerName].RightFoot,
+    ["Humanoid"] = workspace[playerName].Humanoid,
+    ["RightLowerLeg"] = workspace[playerName].RightLowerLeg,
+    ["RightUpperLeg"] = workspace[playerName].RightUpperLeg,
+    ["LeftLowerLeg"] = workspace[playerName].LeftLowerLeg
 }
-local tbl_main1 = 
-{
-      game:GetService("Players")[game.Players.LocalPlayer.Name].Stats, 
-      tbl_0xa51df21d2a5b4043
+
+local tbl_main1 = {
+    localPlayer.Stats,
+    tbl_0xa51df21d2a5b4043
 }
-local tbl_main6 = 
-{
-      game:GetService("Players")[game.Players.LocalPlayer.Name].Stats
+
+local tbl_main6 = {
+    localPlayer.Stats
 }
-rs = game:GetService("RunService").RenderStepped
-while rs:wait() do 
-wait()
-game:GetService("ReplicatedStorage").Remotes.Training.Combat5:InvokeServer(unpack(tbl_main1))
-game:GetService("ReplicatedStorage").Remotes.Training.Defense5:InvokeServer(unpack(tbl_main2))
-game:GetService("ReplicatedStorage").Remotes.Training.Blast5:InvokeServer(unpack(tbl_main))
-game:GetService("ReplicatedStorage").Remotes.Training.Agility5:FireServer(unpack(tbl_main6))
-end
+
+-- Optimize the loop
+local runService = game:GetService("RunService")
+runService.RenderStepped:Connect(function()
+    replicatedStorage.Remotes.Training.Combat5:InvokeServer(unpack(tbl_main1))
+    replicatedStorage.Remotes.Training.Defense5:InvokeServer(unpack(tbl_main2))
+    replicatedStorage.Remotes.Training.Blast5:InvokeServer(unpack(tbl_main))
+    replicatedStorage.Remotes.Training.Agility5:FireServer(unpack(tbl_main6))
+end)
